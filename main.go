@@ -2,17 +2,28 @@ package main
 
 import (
 	"SocketController/osSpec"
-	"fmt"
+	"github.com/positiveway/gofuncs"
+	"strings"
 )
 
 func control(event string) {
-	fmt.Println(event)
+	//fmt.Println(event)
 
 	commandType := event[0]
 	command := event[1:]
 	switch commandType {
 	case 'l':
 		osSpec.TypeLetter(command)
+	case 'm':
+		nums := strings.Split(command, ",")
+		x, y := gofuncs.StrToInt(nums[0]), gofuncs.StrToInt(nums[1])
+		osSpec.MoveMouse(x, y)
+	case 'p':
+		//gofuncs.Print("press")
+		osSpec.PressKeyOrMouse(command)
+	case 'r':
+		//gofuncs.Print("release")
+		osSpec.ReleaseKeyOrMouse(command)
 	}
 }
 func main() {
