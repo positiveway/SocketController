@@ -12,8 +12,6 @@ func control(event string) {
 	commandType := event[0]
 	command := event[1:]
 	switch commandType {
-	case 'l':
-		osSpec.TypeLetter(command)
 	case 'm':
 		nums := strings.Split(command, ",")
 		x, y := gofuncs.StrToInt(nums[0]), gofuncs.StrToInt(nums[1])
@@ -24,6 +22,8 @@ func control(event string) {
 	case 'r':
 		//gofuncs.Print("release")
 		osSpec.ReleaseKeyOrMouse(command)
+	case 'l':
+		osSpec.TypeLetter(command)
 	}
 }
 func main() {
