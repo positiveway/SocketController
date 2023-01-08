@@ -16,7 +16,7 @@ func RunWebSocket() {
 	}
 	fmt.Printf("Listening at %v", addr.String())
 
-	p := make([]byte, 1024)
+	p := make([]byte, 128)
 
 	for {
 		nn, _, err := server.ReadFromUDP(p)
