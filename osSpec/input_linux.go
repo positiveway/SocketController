@@ -65,6 +65,7 @@ func TypeLetter(letter string) {
 }
 
 func MoveMouse(x, y int) {
+	//robotgo.MoveRelative(x, -y)
 	mouse.Move(int32(x), int32(-y))
 }
 
