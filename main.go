@@ -5,38 +5,35 @@ import (
 	"github.com/positiveway/gofuncs"
 )
 
+func toNum(oneByte byte) int {
+	num := int(oneByte)
+	if num > 128 {
+		num -= 256
+	}
+	return num
+}
+
 func control(event []byte) {
 	//fmt.Println(event)
 
-	firstByte := event[0]
+	if len(event) == 2 {
+		x := toNum(event[0])
+		y := toNum(event[1])
 
-	if firstByte <= 3 {
-		x := int(event[1])
-		y := int(event[2])
-
-		switch firstByte {
-		case 1:
-			x *= -1
-		case 2:
-			y *= -1
-		case 3:
-			x *= -1
-			y *= -1
-		}
 		osSpec.MoveMouse(x, y)
 		return
 	}
 
-	commandType := rune(firstByte)
+	commandType := string(event[0:2])
 	command := string(event[1:])
 	switch commandType {
-	case 'p':
+	case "pr":
 		//gofuncs.Print("press")
 		osSpec.PressKeyOrMouse(command)
-	case 'r':
+	case "re":
 		//gofuncs.Print("release")
 		osSpec.ReleaseKeyOrMouse(command)
-	case 'l':
+	case "ty":
 		osSpec.TypeLetter(command)
 	default:
 		gofuncs.Panic("Unknown command %s", string(event))
