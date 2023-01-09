@@ -20,6 +20,7 @@ func control(event []byte) {
 		x := toNum(event[0])
 		y := toNum(event[1])
 
+		//fmt.Printf("%v %v\n", x, y)
 		osSpec.MoveMouse(x, y)
 		return
 	}
