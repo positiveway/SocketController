@@ -25,7 +25,7 @@ func control(event []byte) {
 	}
 
 	commandType := string(event[0:2])
-	command := string(event[1:])
+	command := string(event[2:])
 	switch commandType {
 	case "pr":
 		//gofuncs.Print("press")
