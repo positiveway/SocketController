@@ -2,19 +2,34 @@ package main
 
 import (
 	"SocketController/osSpec"
+	"fmt"
 	"github.com/positiveway/gofuncs"
-	"strings"
 )
 
-func control(event string) {
+func toNum(bytes []byte) int {
+	num := int(bytes[1])
+	switch rune(bytes[0]) {
+	case '+':
+		return num
+	case '-':
+		return -num
+	default:
+		panic(fmt.Sprintf("unsupported value: %s", string(bytes)))
+	}
+}
+
+func control(event []byte) {
 	//fmt.Println(event)
 
-	commandType := event[0]
-	command := event[1:]
+	commandType := rune(event[0])
+	command := string(event[1:])
+
 	switch commandType {
-	case 'm':
-		nums := strings.Split(command, ",")
-		x, y := gofuncs.StrToInt(nums[0]), gofuncs.StrToInt(nums[1])
+	case '+', '-':
+		if len(event) != 4 {
+			gofuncs.Panic("Incorrect length: %v", len(event))
+		}
+		x, y := toNum(event[0:2]), toNum(event[2:4])
 		osSpec.MoveMouse(x, y)
 	case 'p':
 		//gofuncs.Print("press")
@@ -24,6 +39,8 @@ func control(event string) {
 		osSpec.ReleaseKeyOrMouse(command)
 	case 'l':
 		osSpec.TypeLetter(command)
+	default:
+		gofuncs.Panic("Unknown command %s", string(event))
 	}
 }
 func main() {

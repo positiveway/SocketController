@@ -25,7 +25,7 @@ func RunWebSocket() {
 			continue
 		}
 
-		content := string(p[:nn])
+		content := p[:nn]
 		control(content)
 	}
 }
