@@ -23,6 +23,13 @@ func control(event []byte) {
 		//fmt.Printf("%v %v\n", x, y)
 		osSpec.MoveMouse(x, y)
 		return
+	} else if len(event) == 3 && event[0] == 5 {
+		//x := toNum(event[1])
+		y := toNum(event[2])
+
+		//fmt.Printf("%v %v\n", x, y)
+		osSpec.ScrollVertical(y)
+		return
 	}
 
 	commandType := string(event[0:2])
