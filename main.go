@@ -47,6 +47,8 @@ func main() {
 			continue
 		}
 
+		//fmt.Printf("%v %v\n", int(msg[0]), int(msg[1]))
+
 		if msgLen == 2 {
 			if msg[0] == 128 {
 				y := toNum(msg[1])
