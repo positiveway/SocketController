@@ -5,6 +5,8 @@ import (
 	"github.com/bendahl/uinput"
 	"github.com/positiveway/gofuncs"
 	"net"
+	"runtime"
+	"runtime/debug"
 )
 
 func toNum(oneByte byte) int32 {
@@ -39,6 +41,9 @@ func main() {
 	fmt.Printf("Listening at %v", addr.String())
 
 	msg := make([]byte, 2)
+
+	debug.SetGCPercent(-1)
+	runtime.GC()
 
 	for {
 		msgLen, _, err := server.ReadFromUDP(msg)
@@ -86,6 +91,7 @@ func main() {
 				default:
 					keyboard.KeyUp(int(msg[0]))
 				}
+				runtime.GC()
 			}
 		}
 	}
