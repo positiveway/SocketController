@@ -1,7 +1,7 @@
 package osSpec
 
-const LeftMouse = "-1"
-const RightMouse = "-2"
-const MiddleMouse = "-3"
+const LeftMouse = 90
+const RightMouse = 91
+const MiddleMouse = 92
 
 type LetterToCodesT map[string]int

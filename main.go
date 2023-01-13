@@ -2,7 +2,6 @@ package main
 
 import (
 	"SocketController/osSpec"
-	"github.com/positiveway/gofuncs"
 )
 
 func toNum(oneByte byte) int {
@@ -17,34 +16,25 @@ func control(event []byte) {
 	//fmt.Println(event)
 
 	if len(event) == 2 {
-		x := toNum(event[0])
-		y := toNum(event[1])
-
-		//fmt.Printf("%v %v\n", x, y)
-		osSpec.MoveMouse(x, y)
-		return
-	} else if len(event) == 3 && event[0] == 5 {
-		//x := toNum(event[1])
-		y := toNum(event[2])
-
-		//fmt.Printf("%v %v\n", x, y)
-		osSpec.ScrollVertical(y)
-		return
-	}
-
-	commandType := string(event[0:2])
-	command := string(event[2:])
-	switch commandType {
-	case "pr":
-		//gofuncs.Print("press")
-		osSpec.PressKeyOrMouse(command)
-	case "re":
-		//gofuncs.Print("release")
-		osSpec.ReleaseKeyOrMouse(command)
-	case "ty":
-		osSpec.TypeLetter(command)
-	default:
-		gofuncs.Panic("Unknown command %s", string(event))
+		if event[0] == 128 {
+			y := toNum(event[1])
+			osSpec.ScrollVertical(y)
+		} else if event[1] == 128 {
+			x := toNum(event[0])
+			osSpec.ScrollHorizontal(x)
+		} else {
+			x := toNum(event[0])
+			y := toNum(event[1])
+			//fmt.Printf("%v %v\n", x, y)
+			osSpec.MoveMouse(x, y)
+		}
+	} else if len(event) == 1 {
+		if event[0] > 128 {
+			event[0] -= 128
+			osSpec.PressKeyOrMouse(int(event[0]))
+		} else {
+			osSpec.ReleaseKeyOrMouse(int(event[0]))
+		}
 	}
 }
 func main() {

@@ -31,7 +31,7 @@ func InitInput() {
 	gofuncs.CheckErr(err)
 }
 
-func PressKeyOrMouse(key string) {
+func PressKeyOrMouse(key int) {
 	switch key {
 	case LeftMouse:
 		mouse.LeftPress()
@@ -40,12 +40,11 @@ func PressKeyOrMouse(key string) {
 	case MiddleMouse:
 		mouse.MiddlePress()
 	default:
-		code := gofuncs.GetOrPanic(lettersToCodes, key)
-		keyboard.KeyDown(code)
+		keyboard.KeyDown(key)
 	}
 }
 
-func ReleaseKeyOrMouse(key string) {
+func ReleaseKeyOrMouse(key int) {
 	switch key {
 	case LeftMouse:
 		mouse.LeftRelease()
@@ -54,14 +53,8 @@ func ReleaseKeyOrMouse(key string) {
 	case MiddleMouse:
 		mouse.MiddleRelease()
 	default:
-		code := gofuncs.GetOrPanic(lettersToCodes, key)
-		keyboard.KeyUp(code)
+		keyboard.KeyUp(key)
 	}
-}
-
-func TypeLetter(letter string) {
-	code := gofuncs.GetOrPanic(lettersToCodes, letter)
-	keyboard.KeyPress(code)
 }
 
 func MoveMouse(x, y int) {
