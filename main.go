@@ -57,7 +57,7 @@ func main() {
 	runtime.GC()
 
 	for {
-		msgLen, _, err := server.ReadFrom(msg)
+		msgLen, err := server.Read(msg)
 		if err != nil {
 			gofuncs.Print("Client disconnected. Read err: %v", err)
 			continue
