@@ -53,14 +53,15 @@ func main() {
 
 	msg := make([]byte, 2)
 
-	debug.SetGCPercent(-1)
-	runtime.GC()
-
 	conn, err := server.AcceptTCP()
 	if err != nil {
 		gofuncs.Panic("Connection err  %v", err)
 	}
 	defer conn.Close()
+
+	debug.SetGCPercent(-1)
+	runtime.GC()
+
 	for {
 		msgLen, err := conn.Read(msg)
 		if err != nil {
