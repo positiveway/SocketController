@@ -27,17 +27,7 @@ func getSign(num int32) int32 {
 	}
 }
 
-func abs(num int32) int {
-	if num < 0 {
-		num *= -1
-	}
-	return int(num)
-}
-
 func main() {
-	const multiplier = 4
-	const threshold = 20
-
 	const LeftMouse = 90
 	const RightMouse = 91
 	const MiddleMouse = 92
@@ -88,30 +78,6 @@ func main() {
 				y := toNum(msg[1])
 				//fmt.Printf("%v %v\n", x, y)
 				mouse.Move(x, -y)
-
-				//x_abs := abs(x)
-				//y_abs := abs(y)
-				//
-				//if x_abs < threshold && y < threshold {
-				//	mouse.Move(x, -y)
-				//} else {
-				//	x_step := getSign(x) * multiplier
-				//	y_step := getSign(y) * multiplier
-				//
-				//	for x_abs > 0 || y_abs > 0 {
-				//		if x_abs <= 0 {
-				//			x_step = 0
-				//		} else {
-				//			x_abs -= multiplier
-				//		}
-				//		if y_abs <= 0 {
-				//			y_step = 0
-				//		} else {
-				//			y_abs -= multiplier
-				//		}
-				//		mouse.Move(x_step, -y_step)
-				//	}
-				//}
 			}
 		} else if msgLen == 1 {
 			if msg[0] > 128 {
