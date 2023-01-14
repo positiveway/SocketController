@@ -53,64 +53,68 @@ func main() {
 
 	msg := make([]byte, 2)
 
-	conn, err := server.AcceptTCP()
-	if err != nil {
-		gofuncs.Panic("Connection err  %v", err)
-	}
-	defer conn.Close()
-
 	debug.SetGCPercent(-1)
 	runtime.GC()
 
 	for {
-		msgLen, err := conn.Read(msg)
-		if err != nil {
-			fmt.Printf("Read err  %v", err)
-			continue
-		}
-		//fmt.Printf("%v %v\n", int(msg[0]), int(msg[1]))
+		func() {
+			conn, err := server.AcceptTCP()
+			if err != nil {
+				gofuncs.Panic("Connection err  %v", err)
+			}
+			defer conn.Close()
 
-		if msgLen == 2 {
-			if msg[0] == 128 {
-				y := toNum(msg[1])
-				y = getSign(y)
-				mouse.Wheel(false, y)
-			} else if msg[1] == 128 {
-				x := toNum(msg[0])
-				x = getSign(x)
-				mouse.Wheel(true, x)
-			} else {
-				x := toNum(msg[0])
-				y := toNum(msg[1])
-				//fmt.Printf("%v %v\n", x, y)
-				mouse.Move(x, -y)
-			}
-		} else if msgLen == 1 {
-			if msg[0] > 128 {
-				msg[0] -= 128
-				switch msg[0] {
-				case LeftMouse:
-					mouse.LeftPress()
-				case RightMouse:
-					mouse.RightPress()
-				case MiddleMouse:
-					mouse.MiddlePress()
-				default:
-					keyboard.KeyDown(int(msg[0]))
+			for {
+				msgLen, err := conn.Read(msg)
+				if err != nil {
+					fmt.Printf("Read err  %v", err)
+					return
 				}
-			} else {
-				switch msg[0] {
-				case LeftMouse:
-					mouse.LeftRelease()
-				case RightMouse:
-					mouse.RightRelease()
-				case MiddleMouse:
-					mouse.MiddleRelease()
-				default:
-					keyboard.KeyUp(int(msg[0]))
+				//fmt.Printf("%v %v\n", int(msg[0]), int(msg[1]))
+
+				if msgLen == 2 {
+					if msg[0] == 128 {
+						y := toNum(msg[1])
+						y = getSign(y)
+						mouse.Wheel(false, y)
+					} else if msg[1] == 128 {
+						x := toNum(msg[0])
+						x = getSign(x)
+						mouse.Wheel(true, x)
+					} else {
+						x := toNum(msg[0])
+						y := toNum(msg[1])
+						//fmt.Printf("%v %v\n", x, y)
+						mouse.Move(x, -y)
+					}
+				} else if msgLen == 1 {
+					if msg[0] > 128 {
+						msg[0] -= 128
+						switch msg[0] {
+						case LeftMouse:
+							mouse.LeftPress()
+						case RightMouse:
+							mouse.RightPress()
+						case MiddleMouse:
+							mouse.MiddlePress()
+						default:
+							keyboard.KeyDown(int(msg[0]))
+						}
+					} else {
+						switch msg[0] {
+						case LeftMouse:
+							mouse.LeftRelease()
+						case RightMouse:
+							mouse.RightRelease()
+						case MiddleMouse:
+							mouse.MiddleRelease()
+						default:
+							keyboard.KeyUp(int(msg[0]))
+						}
+						runtime.GC()
+					}
 				}
-				runtime.GC()
 			}
-		}
+		}()
 	}
 }
