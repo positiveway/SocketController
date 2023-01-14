@@ -17,7 +17,27 @@ func toNum(oneByte byte) int32 {
 	return num
 }
 
+func getSign(num int32) int32 {
+	if num > 0 {
+		return 1
+	} else if num < 0 {
+		return -1
+	} else {
+		return 0
+	}
+}
+
+func abs(num int32) int {
+	if num < 0 {
+		num *= -1
+	}
+	return int(num)
+}
+
 func main() {
+	const multiplier = 4
+	const threshold = 20
+
 	const LeftMouse = 90
 	const RightMouse = 91
 	const MiddleMouse = 92
@@ -57,15 +77,41 @@ func main() {
 		if msgLen == 2 {
 			if msg[0] == 128 {
 				y := toNum(msg[1])
+				y = getSign(y)
 				mouse.Wheel(false, y)
 			} else if msg[1] == 128 {
 				x := toNum(msg[0])
+				x = getSign(x)
 				mouse.Wheel(true, x)
 			} else {
 				x := toNum(msg[0])
 				y := toNum(msg[1])
 				//fmt.Printf("%v %v\n", x, y)
 				mouse.Move(x, -y)
+
+				//x_abs := abs(x)
+				//y_abs := abs(y)
+				//
+				//if x_abs < threshold && y < threshold {
+				//	mouse.Move(x, -y)
+				//} else {
+				//	x_step := getSign(x) * multiplier
+				//	y_step := getSign(y) * multiplier
+				//
+				//	for x_abs > 0 || y_abs > 0 {
+				//		if x_abs <= 0 {
+				//			x_step = 0
+				//		} else {
+				//			x_abs -= multiplier
+				//		}
+				//		if y_abs <= 0 {
+				//			y_step = 0
+				//		} else {
+				//			y_abs -= multiplier
+				//		}
+				//		mouse.Move(x_step, -y_step)
+				//	}
+				//}
 			}
 		} else if msgLen == 1 {
 			if msg[0] > 128 {
