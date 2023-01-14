@@ -49,7 +49,7 @@ func main() {
 		panic(fmt.Sprintf("Client is already running: %v", err))
 	}
 	defer server.Close()
-	fmt.Printf("Listening at %v", addr.String())
+	gofuncs.Print("Listening at %v", addr.String())
 
 	msg := make([]byte, 2)
 
@@ -60,14 +60,14 @@ func main() {
 		func() {
 			conn, err := server.AcceptTCP()
 			if err != nil {
-				gofuncs.Panic("Connection err  %v", err)
+				gofuncs.Panic("Connection err: %v", err)
 			}
 			defer conn.Close()
 
 			for {
 				msgLen, err := conn.Read(msg)
 				if err != nil {
-					fmt.Printf("Read err  %v", err)
+					gofuncs.Print("Client disconnected. Read err: %v", err)
 					return
 				}
 				//fmt.Printf("%v %v\n", int(msg[0]), int(msg[1]))
