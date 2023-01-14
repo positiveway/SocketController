@@ -32,7 +32,7 @@ func main() {
 	const RightMouse = 91
 	const MiddleMouse = 92
 
-	addr := net.UDPAddr{
+	addr := net.TCPAddr{
 		Port: 5005,
 		IP:   net.ParseIP("0.0.0.0"),
 	}
@@ -44,10 +44,11 @@ func main() {
 	gofuncs.CheckErr(err)
 	defer mouse.Close()
 
-	server, err := net.ListenUDP("udp", &addr)
+	server, err := net.ListenTCP("tcp4", &addr)
 	if err != nil {
 		panic(fmt.Sprintf("Client is already running: %v", err))
 	}
+	defer server.Close()
 	fmt.Printf("Listening at %v", addr.String())
 
 	msg := make([]byte, 2)
@@ -55,13 +56,17 @@ func main() {
 	debug.SetGCPercent(-1)
 	runtime.GC()
 
+	conn, err := server.AcceptTCP()
+	if err != nil {
+		gofuncs.Panic("Connection err  %v", err)
+	}
+	defer conn.Close()
 	for {
-		msgLen, _, err := server.ReadFromUDP(msg)
+		msgLen, err := conn.Read(msg)
 		if err != nil {
 			fmt.Printf("Read err  %v", err)
 			continue
 		}
-
 		//fmt.Printf("%v %v\n", int(msg[0]), int(msg[1]))
 
 		if msgLen == 2 {
