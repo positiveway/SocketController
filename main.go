@@ -62,9 +62,10 @@ func main() {
 			gofuncs.Print("Client disconnected. Read err: %v", err)
 			continue
 		}
-		//fmt.Printf("%v %v\n", int(msg[0]), int(msg[1]))
 
 		if msgLen == 2 {
+			//fmt.Printf("received: %v %v\n", int(msg[0]), int(msg[1]))
+
 			if msg[0] == 128 {
 				y := toNum(msg[1])
 				mouse.Wheel(false, y)
@@ -78,6 +79,12 @@ func main() {
 				mouse.Move(x, -y)
 			}
 		} else if msgLen == 1 {
+			//fmt.Printf("received: %v\n", int(msg[0]))
+
+			if msg[0] == 0 {
+				//fmt.Println("empty")
+				continue
+			}
 			if msg[0] > 128 {
 				msg[0] -= 128
 				switch msg[0] {
