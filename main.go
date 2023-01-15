@@ -67,11 +67,9 @@ func main() {
 		if msgLen == 2 {
 			if msg[0] == 128 {
 				y := toNum(msg[1])
-				y = getSign(y)
 				mouse.Wheel(false, y)
 			} else if msg[1] == 128 {
 				x := toNum(msg[0])
-				x = getSign(x)
 				mouse.Wheel(true, x)
 			} else {
 				x := toNum(msg[0])
