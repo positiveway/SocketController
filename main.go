@@ -68,7 +68,7 @@ func main() {
 
 			if msg[0] == 128 {
 				y := toNum(msg[1])
-				mouse.Wheel(false, y)
+				mouse.Wheel(false, -y)
 			} else if msg[1] == 128 {
 				x := toNum(msg[0])
 				mouse.Wheel(true, x)
