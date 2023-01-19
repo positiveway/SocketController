@@ -80,11 +80,6 @@ func main() {
 			}
 		} else if msgLen == 1 {
 			//fmt.Printf("received: %v\n", int(msg[0]))
-
-			if msg[0] == 0 {
-				//fmt.Println("empty")
-				continue
-			}
 			if msg[0] > 128 {
 				msg[0] -= 128
 				switch msg[0] {
